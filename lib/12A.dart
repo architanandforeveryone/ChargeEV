@@ -1,3 +1,4 @@
+import 'package:ev/slotbook.dart';
 import 'package:flutter/material.dart';
 
 class ChargingStation extends StatefulWidget {
@@ -148,7 +149,12 @@ class _ChargingStationState extends State<ChargingStation> {
                   SizedBox(height: 28),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BookSlotScreen()));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         padding:

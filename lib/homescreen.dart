@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:ev/12A.dart';
+import 'package:ev/search.dart';
 import 'package:flutter/material.dart';
 
 class Homescreen extends StatelessWidget {
@@ -94,13 +95,21 @@ class Homescreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search location',
-                        border: InputBorder.none,
-                        icon: Icon(Icons.search),
-                      ),
-                    ),
+                    child: GestureDetector(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Search location',
+                            border: InputBorder.none,
+                            icon: Icon(Icons.search),
+                          ),
+                          readOnly: true,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchPage()));
+                        }),
                   ),
                 ),
 

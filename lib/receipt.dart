@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:ev/myorders.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -94,7 +95,18 @@ class BookingReceiptPage extends StatelessWidget {
               ),
               SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => YourOrdersPage(
+                              vehicleType: vehicleType,
+                              vehicleModel: vehicleModel,
+                              connectionType: connectionType,
+                              date: date,
+                              time: time,
+                              price: price)));
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
