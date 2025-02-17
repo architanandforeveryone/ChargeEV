@@ -54,7 +54,7 @@ class BookingReceiptPage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Text(
-                'Scan this QR code to verify your booking',
+                'Scan this QR code to make payment from UPI',
                 style: TextStyle(fontSize: 16, color: Colors.grey[700]),
               ),
               SizedBox(height: 30),

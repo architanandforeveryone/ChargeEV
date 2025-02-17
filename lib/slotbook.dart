@@ -1,3 +1,4 @@
+import 'package:ev/book_slot.dart';
 import 'package:ev/receipt.dart';
 import 'package:flutter/material.dart';
 
@@ -120,9 +121,9 @@ class _BookSlotScreenState extends State<BookSlotScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BookingReceiptPage(
-          vehicleType: selectedVehicle,
-          vehicleModel: selectedVehicleModel,
+        builder: (context) => makepayment(
+          //vehicleType: selectedVehicle,
+          //vehicleModel: selectedVehicleModel,
           connectionType: selectedConnection,
           date: selectedDate,
           time: selectedTime,

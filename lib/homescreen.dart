@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:ev/12A.dart';
 import 'package:ev/search.dart';
+import 'package:ev/yourprofile.dart';
 import 'package:flutter/material.dart';
 
 class Homescreen extends StatelessWidget {
@@ -160,15 +161,19 @@ class Homescreen extends StatelessWidget {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20)),
+                        BorderRadius.vertical(top: Radius.circular(2)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildNavItem(Icons.search, 'Search', true),
-                      _buildNavItem(Icons.route, 'En route', false),
-                      _buildNavItem(Icons.favorite_border, 'Favourite', false),
-                      _buildNavItem(Icons.person_outline, 'Profile', false),
+                      _buildNavItem(Icons.search, 'Search', true, context,
+                          targetPage: Homescreen()),
+                      _buildNavItem(Icons.route, 'En route', false, context),
+                      _buildNavItem(
+                          Icons.favorite_border, 'Favourite', false, context),
+                      _buildNavItem(
+                          Icons.person_outline, 'Profile', false, context,
+                          targetPage: ProfileScreen()),
                     ],
                   ),
                 ),
@@ -180,22 +185,34 @@ class Homescreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, bool isSelected) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          color: isSelected ? Colors.blue : Colors.grey,
-        ),
-        Text(
-          label,
-          style: TextStyle(
+  Widget _buildNavItem(
+      IconData icon, String label, bool isSelected, BuildContext context,
+      {Widget? targetPage}) {
+    return GestureDetector(
+      onTap: () {
+        if (targetPage != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => targetPage),
+          );
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
             color: isSelected ? Colors.blue : Colors.grey,
-            fontSize: 12,
           ),
-        ),
-      ],
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? Colors.blue : Colors.grey,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
