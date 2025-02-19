@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "93023163008",
+    "project_id": "mobileauth-68fc7",
+    "storage_bucket": "mobileauth-68fc7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93023163008:android:8364a3882269c310ff0c65",
+        "android_client_info": {
+          "package_name": "com.example.ev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtOXD1SXMBJ04y__ksZ3zBmB8fpiUshPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93023163008:android:8d7fa877b871fc63ff0c65",
+        "android_client_info": {
+          "package_name": "com.example.evcharge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtOXD1SXMBJ04y__ksZ3zBmB8fpiUshPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

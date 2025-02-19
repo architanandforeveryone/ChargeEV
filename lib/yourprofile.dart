@@ -65,11 +65,11 @@ class ProfileScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(Icons.search, 'Search', true, context,
+            _buildNavItem(Icons.search, 'Search', false, context,
                 targetPage: Homescreen()),
             _buildNavItem(Icons.route, 'En route', false, context),
             _buildNavItem(Icons.favorite_border, 'Favourite', false, context),
-            _buildNavItem(Icons.person_outline, 'Profile', false, context,
+            _buildNavItem(Icons.person_outline, 'Profile', true, context,
                 targetPage: ProfileScreen()),
           ],
         ),

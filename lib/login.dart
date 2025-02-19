@@ -1,3 +1,5 @@
+import 'package:ev/otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -6,21 +8,50 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String selectedCountryCode = "+62"; // Default country code
+  String selectedCountryCode = "+62";
+  TextEditingController phoneController = TextEditingController();
 
-  // List of country codes with names (You can add more)
-  final List<Map<String, String>> countryCodes = [
-    {"code": "+91", "country": "🇮🇳"},
-    {"code": "+1", "country": "🇺🇸"},
-    {"code": "+44", "country": "🇬🇧"},
-    {"code": "+62", "country": "🇮🇩"},
-    {"code": "+81", "country": "🇯🇵"},
-    {"code": "+971", "country": "🇦🇪"},
-  ];
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void _verifyPhoneNumber() async {
+    String phoneNumber = selectedCountryCode + phoneController.text.trim();
+
+    print("📞 Sending OTP to: $phoneNumber"); // Debugging
+
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(seconds: 60),
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth.signInWithCredential(credential);
+        print("✅ Auto-verification completed!");
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        print("❌ Verification failed: ${e.message}");
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        print("✅ OTP Sent! Verification ID: $verificationId");
+
+        // Navigate to OTP screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OTPScreen(
+              mobileNumber: phoneNumber,
+              verificationId: verificationId,
+            ),
+          ),
+        );
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        print("⚠️ Auto retrieval timeout.");
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.all(20),
         child: Column(
@@ -36,102 +67,55 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 30),
             Text("Mobile number"),
             SizedBox(height: 5),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [
-                  // Country Code Dropdown
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: selectedCountryCode,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedCountryCode = newValue!;
-                        });
-                      },
-                      items: countryCodes.map((Map<String, String> country) {
-                        return DropdownMenuItem<String>(
-                          value: country["code"],
-                          child: Row(
-                            children: [
-                              Text(country["country"]!),
-                              SizedBox(width: 5),
-                              Text(country["code"]!),
-                            ],
-                          ),
-                        );
-                      }).toList(),
+            Row(
+              children: [
+                DropdownButton<String>(
+                  value: selectedCountryCode,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedCountryCode = newValue!;
+                    });
+                  },
+                  items: [
+                    {"code": "+91", "country": "🇮🇳"},
+                    {"code": "+1", "country": "🇺🇸"},
+                    {"code": "+44", "country": "🇬🇧"},
+                    {"code": "+62", "country": "🇮🇩"},
+                    {"code": "+81", "country": "🇯🇵"},
+                    {"code": "+971", "country": "🇦🇪"},
+                  ].map((country) {
+                    return DropdownMenuItem<String>(
+                      value: country["code"],
+                      child: Text("${country["country"]} ${country["code"]}"),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    controller: phoneController,
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                      hintText: "Enter your mobile number",
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        hintText: "Enter your mobile number",
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 5),
-            Text(
-              "*we are sending OTP for verification",
-              style: TextStyle(color: Colors.red),
+                ),
+              ],
             ),
             SizedBox(height: 20),
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  minimumSize: Size(double.infinity, 50),
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  textStyle: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                onPressed: () {},
-                child: Text("Login", style: TextStyle(color: Colors.white)),
+                onPressed: _verifyPhoneNumber,
+                child: Text("Login"),
               ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(child: Divider()),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text("Or Login using"),
-                ),
-                Expanded(child: Divider()),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    minimumSize: Size(150, 50),
-                  ),
-                  onPressed: () {},
-                  icon: Icon(Icons.facebook, color: Colors.white),
-                  label:
-                      Text("Facebook", style: TextStyle(color: Colors.white)),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    minimumSize: Size(150, 50),
-                  ),
-                  onPressed: () {},
-                  icon: Icon(Icons.g_translate, color: Colors.white),
-                  label: Text("Google", style: TextStyle(color: Colors.white)),
-                ),
-              ],
             ),
           ],
         ),
